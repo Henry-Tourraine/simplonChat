@@ -1,0 +1,29 @@
+from base import Base
+from typing import List
+from typing import Optional
+from sqlalchemy import ForeignKey
+from sqlalchemy import String, DateTime
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import relationship
+from datetime import datetime
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from .user import User
+else:
+    User = "User"
+
+
+class Call(Base):
+    __tablename__ = "calls"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    start: Mapped[datetime] = mapped_column(DateTime)
+    end: Mapped[Optional[datetime]] = mapped_column(DateTime)
+
+    user: Mapped[User] = relationship(
+        back_populates="calls"
+    )
+
+    def __repr__(self) -> str:
+        return f"Call(start={self.start.strftime('%d/%m/%Y')}, end={self.end.strftime('%d/%m/%Y')})"
