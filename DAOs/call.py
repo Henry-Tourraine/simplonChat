@@ -1,4 +1,4 @@
-from base import Base
+from .base import Base
 from typing import List
 from typing import Optional
 from sqlalchemy import ForeignKey
@@ -15,13 +15,19 @@ else:
 
 
 class Call(Base):
+    """
+    id: int
+    start: datetime
+    end: datetime?
+    user: User?
+    """
     __tablename__ = "calls"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     start: Mapped[datetime] = mapped_column(DateTime)
     end: Mapped[Optional[datetime]] = mapped_column(DateTime)
-
-    user: Mapped[User] = relationship(
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    user: Mapped[Optional[User]] = relationship(
         back_populates="calls"
     )
 

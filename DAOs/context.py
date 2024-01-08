@@ -1,12 +1,12 @@
 import sqlalchemy as db
-from base import Base
+from .base import Base
 from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase
-from user import User
-from call import Call
-from connection import Connection
-from invitation import Invitation
-from message import Message
+from sqlalchemy.orm import sessionmaker
+from .user import User
+from .call import Call
+from .connection import Connection
+from .invitation import Invitation
+from .message import Message
 
 
 class Context:
@@ -23,6 +23,12 @@ class Context:
         Invitation
         Connection
         Base.metadata.create_all(engine)
+
+        Session = sessionmaker(bind=engine)
+        self.session = Session()
+
+    def getSession(self):
+        return self.session
 
 if __name__ == "__main__":
     Context()

@@ -1,7 +1,6 @@
-from base import Base
+from .base import Base
 from typing import List
 from typing import Optional
-from sqlalchemy import ForeignKey
 from sqlalchemy import String
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
@@ -16,16 +15,7 @@ else:
     Call = "Call"
     Message = "Message"
 
-"""
-User & Groups
-id
-pseudo
-email
-pwd
-calls
-connections
-messages
-"""
+
 class User(Base):
     __tablename__ = "users"
 
@@ -43,12 +33,14 @@ class User(Base):
     )
 
     received: Mapped[List["Message"]] = relationship(
+        primaryjoin="User.id==Message.receiver_id",
         back_populates="receiver", cascade="all, delete-orphan"
     )
 
-    sender: Mapped[List["Message"]] = relationship(
+    sent: Mapped[List["Message"]] = relationship(
+        primaryjoin="User.id==Message.sender_id",
         back_populates="sender", cascade="all, delete-orphan"
     )
 
     def __repr__(self) -> str:
-        return f"User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})"
+        return f"User(id={self.id!r}, pseudo={self.pseudo!r}, email={self.email!r})"
